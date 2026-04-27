@@ -35,6 +35,12 @@ io.on('connection', (socket) => {
 
 app.use('/api/auth', require('./routes/auth'));
 
+app.use('/api/services', require('./routes/services'));
+
+app.use('/api/reviews', require('./routes/reviews'));
+
+app.use('/api/nps', require('./routes/nps'));
+
 app.get('/', (req, res) => {
     res.json({ message: 'Service Hub API is running!' });
 });
