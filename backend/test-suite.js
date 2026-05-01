@@ -51,9 +51,15 @@ async function runTests() {
         // 4. Testar Criação de Review (Simulando um cliente)
         console.log('\n--- Testando Reviews e NPS ---');
 
+        // Primeiro, precisamos marcar o serviço como concluído para poder avaliar
+        await axios.put(`${API_URL}/services/${serviceId}/status`, {
+            status: 'completed'
+        }, { headers: { Authorization: `Bearer ${token}` } });
+        console.log('✅ Serviço marcado como concluído!');
+
         await axios.post(`${API_URL}/reviews`, {
             serviceId: serviceId,
-            rating: 10,
+            score: 10,
             comment: 'Excelente serviço!'
         }, { headers: { Authorization: `Bearer ${clientToken}` } });
         console.log('✅ Review (Nota 10) criada!');

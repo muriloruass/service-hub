@@ -15,7 +15,7 @@ const ReviewForm = ({ serviceId, onReviewSuccess }) => {
     try {
       await api.post('/reviews', {
         serviceId,
-        rating,
+        score: rating,
         comment
       });
       setMessage({ type: 'success', text: 'Avaliação enviada com sucesso!' });

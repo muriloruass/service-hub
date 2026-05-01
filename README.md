@@ -35,22 +35,30 @@ Service Hub is a full-stack solution that manages the entire lifecycle of a serv
 - [x] **v0.1 - Foundation:** Project initialization, environment setup, and JWT Auth.
 - [x] **v0.2 - Core Engine:** Services CRUD, Marketplace UI, and Database integration.
 - [x] **v0.3 - Quality Metrics:** Reviews system and NPS Analytics Dashboard.
-- [ ] **v0.4 - Real-Time:** WebSocket integration for instant notifications.
-- [ ] **v1.0 - Delivery:** Final production deployment and documentation.
+- [x] **v0.4 - Real-Time:** WebSocket integration for instant notifications.
+- [x] **v1.0 - Delivery:** Final production deployment and documentation.
 
 ## ⚙️ Getting Started
 
 ### Backend
-1. Navigate to `/backend`
-2. Install dependencies: `npm install`
-3. Configure `.env` (MONGODB_URI, JWT_SECRET, PORT)
-4. Start the server: `npm start`
+1. Navegue até `/backend`
+2. Instale as dependências: `npm install`
+3. Configure o arquivo `.env` (exemplo abaixo)
+4. Inicie o servidor: `npm start`
+5. Para rodar a suíte de testes: `node test-suite.js`
+
+**Exemplo de .env (Backend):**
+```env
+PORT=5000
+MONGODB_URI=seu_mongodb_uri
+JWT_SECRET=seu_segredo_jwt
+```
 
 ### Frontend
-1. Navigate to `/frontend`
-2. Install dependencies: `npm install`
-3. Configure `.env` (VITE_API_URL)
-4. Start development server: `npm run dev`
+1. Navegue até `/frontend`
+2. Instale as dependências: `npm install`
+3. Configure o arquivo `.env` (VITE_API_URL=http://localhost:5000/api)
+4. Inicie o servidor de desenvolvimento: `npm run dev`
 
 ---
-*Developed for the Trends in Technology Course - W2026.*
+*Desenvolvido para a disciplina de Trends in Technology - W2026.*

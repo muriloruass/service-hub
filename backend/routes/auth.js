@@ -92,4 +92,14 @@ router.get('/me', authMiddleware, async (req, res) => {
     }
 });
 
+// Get all clients
+router.get('/clients', authMiddleware, async (req, res) => {
+    try {
+        const clients = await User.find({ type: 'client' }).select('-password');
+        res.json(clients);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
