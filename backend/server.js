@@ -41,6 +41,8 @@ app.use('/api/reviews', require('./routes/reviews'));
 
 app.use('/api/nps', require('./routes/nps'));
 
+app.use('/api/available-services', require('./routes/availableServices'));
+
 app.get('/', (req, res) => {
     res.json({ message: 'Service Hub API is running!' });
 });
