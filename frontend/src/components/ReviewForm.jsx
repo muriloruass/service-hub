@@ -1,96 +1,105 @@
 import { useState } from 'react';
 import api from '../services/api';
+import toast from 'react-hot-toast';
 
 const ReviewForm = ({ serviceId, onReviewSuccess }) => {
-  const [rating, setRating] = useState(10);
+  const [score, setScore] = useState('');
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!score || score < 0 || score > 10) {
+      toast.error('Please enter a valid score between 0 and 10');
+      return;
+    }
+    
+    if (!comment.trim()) {
+      toast.error('Please enter a comment');
+      return;
+    }
+    
     setLoading(true);
-    setMessage(null);
-
     try {
       await api.post('/reviews', {
         serviceId,
-        score: rating,
+        score: parseInt(score),
         comment
       });
-      setMessage({ type: 'success', text: 'Avaliação enviada com sucesso!' });
-      if (onReviewSuccess) onReviewSuccess();
+      
+      toast.success('Review submitted successfully!');
+      setScore('');
+      setComment('');
+      
+      if (onReviewSuccess) {
+        onReviewSuccess();
+      }
     } catch (error) {
-      setMessage({ 
-        type: 'error', 
-        text: error.response?.data?.error || 'Erro ao enviar avaliação.' 
-      });
+      toast.error(error.response?.data?.error || 'Error submitting review');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-      <h3 className="text-lg font-bold text-gray-900 mb-4">Avaliar Serviço</h3>
-      
+    <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+      <h3 className="text-xl font-bold mb-4 text-gray-800">Write a Review</h3>
       <form onSubmit={handleSubmit}>
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            De 0 a 10, qual a probabilidade de você nos recomendar?
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {[...Array(11).keys()].map((num) => (
-              <button
-                key={num}
-                type="button"
-                onClick={() => setRating(num)}
-                className={`w-10 h-10 rounded-lg font-bold transition-all ${
-                  rating === num 
-                    ? 'bg-blue-600 text-white scale-110 shadow-md' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                {num}
-              </button>
-            ))}
-          </div>
-          <div className="flex justify-between mt-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">
-            <span>Muito Improvável</span>
-            <span>Muito Provável</span>
-          </div>
-        </div>
-
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Conte-nos mais (opcional)
+          <label className="block text-gray-700 font-medium mb-2">
+            Score (0 to 10)
+          </label>
+          <input
+            type="number"
+            step="1"
+            min="0"
+            max="10"
+            value={score}
+            onChange={(e) => setScore(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g., 8"
+            required
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            0-10 scale: 0=Very Bad, 5=Average, 10=Excellent
+          </p>
+        </div>
+        
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">
+            Comment
           </label>
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows="3"
-            placeholder="O que você achou do serviço?"
-          ></textarea>
+            placeholder="Share your experience with this service..."
+            required
+          />
         </div>
-
-        {message && (
-          <div className={`p-3 rounded-lg mb-4 text-sm font-medium ${
-            message.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
-          }`}>
-            {message.text}
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-3 rounded-xl font-bold text-white transition-all ${
-            loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200'
-          }`}
-        >
-          {loading ? 'Enviando...' : 'Confirmar Avaliação'}
-        </button>
+        
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          >
+            {loading ? 'Submitting...' : 'Submit Review'}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setScore('');
+              setComment('');
+              if (onReviewSuccess) onReviewSuccess();
+            }}
+            className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

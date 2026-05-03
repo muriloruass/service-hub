@@ -181,6 +181,12 @@ const Dashboard = () => {
           </div>
           <div className="flex gap-3">
             <Link
+              to="/profile"
+              className="bg-gray-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-700 transition"
+            >
+              My Profile
+            </Link>
+            <Link
               to="/marketplace"
               className="bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-700 transition"
             >
@@ -192,6 +198,7 @@ const Dashboard = () => {
           </div>
         </header>
 
+        {/* Resto do código igual... */}
         {user?.type === 'provider' && (
           <>
             {/* NPS Card */}
@@ -207,7 +214,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Reviews Received from Clients - NO EDIT BUTTON */}
+            {/* Reviews Received from Clients */}
             <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-8">
               <h2 className="text-2xl font-bold mb-4 text-gray-800">Reviews Received from Clients</h2>
               <div className="space-y-3">
@@ -262,29 +269,13 @@ const Dashboard = () => {
                 </button>
               </form>
 
-              {/* Edit Available Service Form */}
               {editingAvailableService && (
                 <div className="mb-6 p-4 border border-blue-200 bg-blue-50 rounded-lg">
                   <h3 className="font-bold mb-2 text-gray-800">Edit Service</h3>
                   <form onSubmit={handleUpdateAvailableService} className="space-y-3">
-                    <input 
-                      type="text" 
-                      value={editingAvailableService.title} 
-                      onChange={e => setEditingAvailableService({...editingAvailableService, title: e.target.value})} 
-                      className="border p-2 rounded w-full"
-                    />
-                    <input 
-                      type="text" 
-                      value={editingAvailableService.description} 
-                      onChange={e => setEditingAvailableService({...editingAvailableService, description: e.target.value})} 
-                      className="border p-2 rounded w-full"
-                    />
-                    <input 
-                      type="number" 
-                      value={editingAvailableService.price} 
-                      onChange={e => setEditingAvailableService({...editingAvailableService, price: e.target.value})} 
-                      className="border p-2 rounded w-full"
-                    />
+                    <input type="text" value={editingAvailableService.title} onChange={e => setEditingAvailableService({...editingAvailableService, title: e.target.value})} className="border p-2 rounded w-full" />
+                    <input type="text" value={editingAvailableService.description} onChange={e => setEditingAvailableService({...editingAvailableService, description: e.target.value})} className="border p-2 rounded w-full" />
+                    <input type="number" value={editingAvailableService.price} onChange={e => setEditingAvailableService({...editingAvailableService, price: e.target.value})} className="border p-2 rounded w-full" />
                     <div className="flex gap-2">
                       <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded font-bold">Save</button>
                       <button type="button" onClick={() => setEditingAvailableService(null)} className="bg-gray-400 text-white px-4 py-2 rounded font-bold">Cancel</button>
@@ -293,7 +284,6 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {/* Available Services List */}
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-700 mb-3">Your Offered Services</h3>
                 {availableServices.map(s => (
@@ -319,52 +309,18 @@ const Dashboard = () => {
               
               <form onSubmit={handleCreateService} className="space-y-4 mb-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input 
-                    type="text" 
-                    placeholder="Service Title *" 
-                    required 
-                    value={newService.title} 
-                    onChange={e => setNewService({...newService, title: e.target.value})} 
-                    className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <input 
-                    type="number" 
-                    placeholder="Price (R$) *" 
-                    required 
-                    value={newService.price} 
-                    onChange={e => setNewService({...newService, price: e.target.value})} 
-                    className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <input 
-                    type="date" 
-                    required 
-                    value={newService.executionDate} 
-                    onChange={e => setNewService({...newService, executionDate: e.target.value})} 
-                    className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <select 
-                    required 
-                    value={newService.clientId} 
-                    onChange={e => setNewService({...newService, clientId: e.target.value})} 
-                    className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
+                  <input type="text" placeholder="Service Title *" required value={newService.title} onChange={e => setNewService({...newService, title: e.target.value})} className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input type="number" placeholder="Price (R$) *" required value={newService.price} onChange={e => setNewService({...newService, price: e.target.value})} className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input type="date" required value={newService.executionDate} onChange={e => setNewService({...newService, executionDate: e.target.value})} className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <select required value={newService.clientId} onChange={e => setNewService({...newService, clientId: e.target.value})} className="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Select Client *</option>
                     {clients.map(c => <option key={c._id} value={c._id}>{c.name} ({c.email})</option>)}
                   </select>
-                  <textarea 
-                    placeholder="Description" 
-                    value={newService.description} 
-                    onChange={e => setNewService({...newService, description: e.target.value})} 
-                    className="border p-3 rounded-lg md:col-span-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows="2"
-                  />
+                  <textarea placeholder="Description" value={newService.description} onChange={e => setNewService({...newService, description: e.target.value})} className="border p-3 rounded-lg md:col-span-2 focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2" />
                 </div>
-                <button className="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 transition">
-                  + Register Performed Service
-                </button>
+                <button className="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700 transition">+ Register Performed Service</button>
               </form>
 
-              {/* Edit Performed Service Form */}
               {editingService && (
                 <div className="mb-6 p-4 border border-blue-200 bg-blue-50 rounded-lg">
                   <h3 className="font-bold mb-2 text-gray-800">Edit Performed Service</h3>
@@ -380,7 +336,6 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {/* Performed Services List */}
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-700 mb-3">Performed Services</h3>
                 {services.map(s => {
@@ -390,28 +345,15 @@ const Dashboard = () => {
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <div className="font-bold text-gray-800">{s.title} - R$ {s.price}</div>
-                          <div className="text-sm text-gray-500">
-                            Client: {s.clientId?.name || 'N/A'} | Date: {new Date(s.executionDate).toLocaleDateString()}
-                          </div>
+                          <div className="text-sm text-gray-500">Client: {s.clientId?.name || 'N/A'} | Date: {new Date(s.executionDate).toLocaleDateString()}</div>
                           <div className="text-sm text-gray-500 mt-1">Description: {s.description || 'No description'}</div>
                           <div className="mt-2">
-                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${reviewStatus.bg} ${reviewStatus.color}`}>
-                              {reviewStatus.text}
-                            </span>
-                            <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${
-                              s.status === 'completed' ? 'bg-green-100 text-green-600' : 
-                              s.status === 'cancelled' ? 'bg-red-100 text-red-600' : 'bg-yellow-100 text-yellow-600'
-                            }`}>
-                              Status: {s.status}
-                            </span>
+                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${reviewStatus.bg} ${reviewStatus.color}`}>{reviewStatus.text}</span>
+                            <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${s.status === 'completed' ? 'bg-green-100 text-green-600' : s.status === 'cancelled' ? 'bg-red-100 text-red-600' : 'bg-yellow-100 text-yellow-600'}`}>Status: {s.status}</span>
                           </div>
                         </div>
                         <div className="flex gap-2 ml-4">
-                          {s.status === 'scheduled' && (
-                            <button onClick={() => handleStatusChange(s._id, 'completed')} className="bg-green-100 text-green-700 px-3 py-1 rounded text-sm font-bold hover:bg-green-200 transition">
-                              Mark Completed
-                            </button>
-                          )}
+                          {s.status === 'scheduled' && <button onClick={() => handleStatusChange(s._id, 'completed')} className="bg-green-100 text-green-700 px-3 py-1 rounded text-sm font-bold">Mark Completed</button>}
                           <button onClick={() => setEditingService(s)} className="bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm font-bold">Edit</button>
                           <button onClick={() => handleDeleteService(s._id)} className="bg-red-100 text-red-700 px-3 py-1 rounded text-sm font-bold">Delete</button>
                         </div>
@@ -437,60 +379,32 @@ const Dashboard = () => {
                       <div className="p-4 border rounded-lg flex justify-between items-center bg-gray-50">
                         <div>
                           <div className="font-bold text-gray-800">{s.title} - R$ {s.price}</div>
-                          <div className="text-sm text-gray-500">
-                            Provider: {s.providerId?.name || 'N/A'} | Date: {new Date(s.executionDate).toLocaleDateString()} | Status: 
-                            <span className={`ml-1 font-semibold ${
-                              s.status === 'completed' ? 'text-green-600' : 
-                              s.status === 'cancelled' ? 'text-red-600' : 'text-yellow-600'
-                            }`}>
-                              {s.status}
-                            </span>
-                          </div>
+                          <div className="text-sm text-gray-500">Provider: {s.providerId?.name || 'N/A'} | Date: {new Date(s.executionDate).toLocaleDateString()} | Status: <span className={`ml-1 font-semibold ${s.status === 'completed' ? 'text-green-600' : s.status === 'cancelled' ? 'text-red-600' : 'text-yellow-600'}`}>{s.status}</span></div>
                         </div>
-                        {s.status === 'completed' && !hasReviewed && (
-                          <button 
-                            onClick={() => setReviewingServiceId(reviewingServiceId === s._id ? null : s._id)} 
-                            className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold hover:bg-blue-700 transition"
-                          >
-                            {reviewingServiceId === s._id ? 'Cancel' : 'Write Review'}
-                          </button>
-                        )}
+                        {s.status === 'completed' && !hasReviewed && <button onClick={() => setReviewingServiceId(reviewingServiceId === s._id ? null : s._id)} className="bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold">{reviewingServiceId === s._id ? 'Cancel' : 'Write Review'}</button>}
                       </div>
                       {reviewingServiceId === s._id && (
                         <div className="mt-4">
-                          <ReviewForm 
-                            serviceId={s._id} 
-                            onReviewSuccess={() => {
-                              setReviewingServiceId(null);
-                              fetchData();
-                            }} 
-                          />
+                          <ReviewForm serviceId={s._id} onReviewSuccess={() => { setReviewingServiceId(null); fetchData(); }} />
                         </div>
                       )}
                     </div>
                   );
                 })}
-                {services.length === 0 && (
-                  <p className="text-gray-500 text-center py-4">No services hired yet.</p>
-                )}
+                {services.length === 0 && <p className="text-gray-500 text-center py-4">No services hired yet.</p>}
               </div>
             </div>
 
-            {/* My Reviews - NO EDIT OR DELETE BUTTONS */}
             <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-8">
               <h2 className="text-2xl font-bold mb-4 text-gray-800">My Reviews</h2>
               <div className="space-y-3">
                 {reviews.map(r => (
                   <div key={r._id} className="p-4 border rounded-lg bg-gray-50">
                     <div className="font-bold text-gray-800">Score: {r.score}/10</div>
-                    <div className="text-sm text-gray-500">
-                      Service: {r.serviceId?.title || 'N/A'} | Comment: {r.comment}
-                    </div>
+                    <div className="text-sm text-gray-500">Service: {r.serviceId?.title || 'N/A'} | Comment: {r.comment}</div>
                   </div>
                 ))}
-                {reviews.length === 0 && (
-                  <p className="text-gray-500 text-center py-4">You haven't reviewed any services yet.</p>
-                )}
+                {reviews.length === 0 && <p className="text-gray-500 text-center py-4">You haven't reviewed any services yet.</p>}
               </div>
             </div>
           </>

@@ -2,6 +2,28 @@ import { useEffect, useState } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
+
+// Star Rating Component
+const StarRating = ({ rating }) => {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return (
+    <div className="flex items-center gap-1">
+      {[...Array(fullStars)].map((_, i) => (
+        <span key={`full-${i}`} className="text-yellow-400 text-lg">★</span>
+      ))}
+      {hasHalfStar && (
+        <span className="text-yellow-400 text-lg">½</span>
+      )}
+      {[...Array(emptyStars)].map((_, i) => (
+        <span key={`empty-${i}`} className="text-gray-300 text-lg">★</span>
+      ))}
+    </div>
+  );
+};
 
 const Marketplace = () => {
   const [services, setServices] = useState([]);
@@ -40,10 +62,53 @@ const Marketplace = () => {
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="max-w-6xl mx-auto">
-        <header className="mb-10 text-center">
-          <h1 className="text-4xl font-extrabold text-blue-900">Service Marketplace</h1>
-          <p className="text-gray-600 mt-2">Find the best professionals for your project</p>
-        </header>
+        {/* Header - diferente para usuário logado vs não logado */}
+        {user ? (
+          <header className="flex justify-between items-center mb-10">
+            <div>
+              <h1 className="text-3xl font-extrabold text-blue-900">Welcome, {user?.name}</h1>
+              <p className="text-gray-500">Marketplace ({user?.type})</p>
+            </div>
+            <div className="flex gap-3">
+              <Link
+                to="/profile"
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-700 transition"
+              >
+                My Profile
+              </Link>
+              <Link
+                to="/dashboard"
+                className="bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-700 transition"
+              >
+                Go to Dashboard
+              </Link>
+              <Link
+                to="/login"
+                className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 transition"
+                onClick={() => {
+                  localStorage.removeItem('token');
+                }}
+              >
+                Logout
+              </Link>
+            </div>
+          </header>
+        ) : (
+          <header className="flex justify-between items-center mb-10">
+            <div>
+              <h1 className="text-3xl font-extrabold text-blue-900">Service Marketplace</h1>
+              <p className="text-gray-500">Find the best professionals for your project</p>
+            </div>
+            <div className="flex gap-3">
+              <Link
+                to="/login"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition"
+              >
+                Sign In
+              </Link>
+            </div>
+          </header>
+        )}
 
         {services.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-2xl shadow-sm">
@@ -63,6 +128,18 @@ const Marketplace = () => {
                   
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{service.title}</h3>
                   <p className="text-gray-600 text-sm mb-4">{service.description}</p>
+                  
+                  {/* Provider Rating Stars */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <StarRating rating={service.providerRating?.starRating || 0} />
+                        <span className="text-xs text-gray-500">
+                          ({service.providerRating?.reviewCount || 0} {service.providerRating?.reviewCount === 1 ? 'review' : 'reviews'})
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                   
                   <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
                     <div>
@@ -118,6 +195,18 @@ const Marketplace = () => {
               <p className="text-sm text-gray-600">
                 <span className="font-semibold">Phone:</span> {selectedService.providerId?.phone || 'Not provided'}
               </p>
+            </div>
+            {/* Provider Rating in Modal */}
+            <div className="bg-gray-50 p-3 rounded-lg mb-4">
+              <p className="text-sm text-gray-600 mb-1">
+                <span className="font-semibold">Provider Rating:</span>
+              </p>
+              <div className="flex items-center gap-2">
+                <StarRating rating={selectedService.providerRating?.starRating || 0} />
+                <span className="text-xs text-gray-500">
+                  ({selectedService.providerRating?.reviewCount || 0} {selectedService.providerRating?.reviewCount === 1 ? 'review' : 'reviews'})
+                </span>
+              </div>
             </div>
             <p className="text-sm text-gray-500 mb-4">
               Please contact the provider directly outside the platform to hire this service.

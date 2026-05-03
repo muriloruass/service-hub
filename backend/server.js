@@ -43,6 +43,8 @@ app.use('/api/nps', require('./routes/nps'));
 
 app.use('/api/available-services', require('./routes/availableServices'));
 
+app.use('/api/profile', require('./routes/profile'));
+
 app.get('/', (req, res) => {
     res.json({ message: 'Service Hub API is running!' });
 });

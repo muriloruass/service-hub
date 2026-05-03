@@ -9,7 +9,7 @@ const router = express.Router();
 // Signup
 router.post('/signup', async (req, res) => {
     try {
-        const { name, email, password, type } = req.body;
+        const { name, email, phone, password, type } = req.body;
         
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -21,6 +21,7 @@ router.post('/signup', async (req, res) => {
         const user = new User({
             name,
             email,
+            phone,
             password: hashedPassword,
             type
         });
@@ -39,6 +40,7 @@ router.post('/signup', async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                phone: user.phone,
                 type: user.type
             }
         });
@@ -74,6 +76,7 @@ router.post('/login', async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                phone: user.phone,
                 type: user.type
             }
         });

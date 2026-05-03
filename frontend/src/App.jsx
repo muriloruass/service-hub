@@ -9,6 +9,9 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Marketplace from './pages/Marketplace';
+import Profile from './pages/Profile';
+
+
 
 const SocketListener = () => {
   useEffect(() => {
@@ -43,6 +46,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </AuthProvider>
