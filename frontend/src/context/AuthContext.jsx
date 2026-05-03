@@ -1,8 +1,16 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 export const AuthContext = createContext();
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -33,8 +41,8 @@ export const AuthProvider = ({ children }) => {
     navigate('/dashboard');
   };
 
-  const signup = async (name, email, password, type) => {
-    const response = await api.post('/auth/signup', { name, email, password, type });
+  const signup = async (name, email, phone, password, type) => {
+    const response = await api.post('/auth/signup', { name, email, phone, password, type });
     localStorage.setItem('token', response.data.token);
     setUser(response.data.user);
     navigate('/dashboard');

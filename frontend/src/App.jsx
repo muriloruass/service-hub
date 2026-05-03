@@ -15,11 +15,11 @@ const SocketListener = () => {
     const socket = io(import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000');
     
     socket.on('service_completed', (data) => {
-      toast(`✅ Serviço "${data.title}" foi concluído!`, { duration: 5000 });
+      toast(`Service "${data.title}" has been completed!`, { duration: 5000 });
     });
 
     socket.on('new_review', (data) => {
-      toast(`⭐ Nova avaliação de nota ${data.score} recebida!`, { duration: 5000 });
+      toast(`New review with score ${data.score} received!`, { duration: 5000 });
     });
 
     return () => {
